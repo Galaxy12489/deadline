@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PC Builder - Готовые сборки</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style1.css') }}">
+</head>
+<style>
+/*  Общие стили */
+body {
+    font-family: sans-serif;
+    background-color: #222;
+    color: #eee;
+    margin: 0; 
+    height: 100vh; 
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; 
+    padding: 20px;  
+}
+
+/*  Стили для элементов страницы */
+.calculator {
+    background-color: #333;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 20px auto;
+    max-width: 1600px;
+    box-sizing: border-box; 
+
+.calculator__title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.calculator__form {
+    display: flex;
+    flex-direction: column;
+}
+
+.calculator__component {
+    margin-bottom: 10px;
+}
+
+.calculator__label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.calculator__input {
+    padding: 10px;
+    border: 1px solid #555;
+    background-color: #444;
+    color: #eee;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.calculator__input--cpu {
+    background-color: #555;
+}
+
+.calculator__input--gpu {
+    background-color: #666;
+}
+
+.calculator__button {
+    background-color: #7CFC00;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-top: 10px;
+}
+
+.calculator__result {
+    margin-top: 10px;
+    text-align: center;
+    font-weight: bold;
+}
+
+header {
+    background-color: #333;
+    padding: 20px;
+    text-align: center;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px 0;
+}
+
+.buttons a {
+    background-color: #7CFC00;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.buttons a:hover {
+    background-color: #69e000;
+}
+
+.spacer {
+    height: 40px;
+}
+
+/* Футер */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: #ccc;
+    margin-top: auto; 
+}
+
+/* Стили для сборок */
+.build-options {
+    display: flex;    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.build {
+    width: 30%;
+    background-color: #333;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+    .build {
+        width: 100%;
+    }
+}
+</style>
+
+<body>
+    <header>
+        <h1>PC Builder</h1>
+        <p>Выберите свою идеальную сборку</p>
+    </header>
+
+    <div class="buttons">
+        <a href="{{ url_for('index') }}">Проверка на совместимость</a>
+        <a href="/calculator">Калькулятор мощности</a>
+        <a href="/about">Готовые сборки</a>
+    </div>
+
+    <main>
+        <div class="build-options">
+            <div class="build">
+                <h3>Процессор</h3>
+                <p>Центральный процессор (CPU) – это "мозг" вашего компьютера. Он выполняет все основные вычисления и управляет работой других компонентов. От его мощности напрямую зависит скорость работы программ, игр и других задач.</p>
+                <p>Основные характеристики: Ядра, потоки, частота</p>
+                <p>Сокет:Тип разъема на материнской плате, в который устанавливается процессор. </p>
+                <p>Тепловыделение (TDP):Показывает, сколько тепла выделяет процессор, и определяет требования к системе охлаждения.</p>
+                <p></p>
+            </div>
+            <div class="build">
+                <h3>Видеокарта</h3>
+                <p>Графический процессор (GPU) отвечает за обработку и вывод изображения на экран. Особенно важна для игр, 3D-моделирования и работы с графикой. Современные видеокарты также помогают в вычислениях благодаря технологии CUDA и другим.</p>
+                <p>Основные характеристики: Объем видеопамяти, частота ядра, тип памяти</p>
+                <p>Интерфейс: Современные видеокарты используют PCIe x16 (обычно версии 3.0 или 4.0).</p>
+                <p>Тепловыделение: Мощные видеокарты требуют хорошего охлаждения и соответствующего блока питания.</p>
+                <p>Дополнительное питание: Большинство современных видеокарт требуют дополнительных 6- или 8-контактных разъемов питания.</p>
+            </div>
+
+            <div class="build">
+                <h3>Накопители</h3>
+                <p>Устройства для хранения данных. В современных сборках обычно используют комбинацию быстрого SSD для системы и программ и HDD большого объема для хранения файлов.</p>
+                <p>Типы накопителей:</p>
+                <ul>
+                    <li>SSD (SATA) - быстрее HDD, подключаются через SATA</li>
+                    <li>NVMe SSD - самые быстрые, подключаются через M.2 слот</li>
+                    <li>HDD - медленные, но дешевые за гигабайт</li>
+                </ul>
+                <p>Форм-факторы: 2.5", M.2, 3.5" (для HDD)</p>
+                <p>Объем: От 240ГБ для SSD до нескольких ТБ для HDD</p>
+            </div>
+
+            <div class="build">
+                <h3>Материнская плата</h3>
+                <p>Основная плата, которая соединяет все компоненты компьютера. Определяет, какие процессоры и память можно использовать, количество портов и разъемов.</p>
+                <p>Основные характеристики:</p>
+                <ul>
+                    <li>Чипсет: Определяет функциональность платы</li>
+                    <li>Сокет: Тип разъема для процессора</li>
+                    <li>Форм-фактор: ATX, microATX, mini-ITX</li>
+                    <li>Слоты RAM: Количество и тип (DDR4/DDR5)</li>
+                    <li>Слоты расширения: PCIe x16, PCIe x1, M.2</li>
+                </ul>
+                <p>Дополнительно: Встроенный звук, сетевой адаптер, Wi-Fi, USB-порты</p>
+            </div>
+
+            <div class="build">
+                <h3>Блок питания</h3>
+                <p>Обеспечивает питание всех компонентов компьютера. Качественный БП - залог стабильной работы системы.</p>
+                <p>Основные характеристики:</p>
+                <ul>
+                    <li>Мощность: Измеряется в ваттах (Вт), должна соответствовать потреблению системы</li>
+                    <li>Сертификация: 80 Plus (Bronze, Silver, Gold, Platinum, Titanium)</li>
+                    <li>Разъемы: 24-pin (материнка), 4/8-pin (CPU), 6/8-pin (GPU), SATA, Molex</li>
+                    <li>Форм-фактор: ATX, SFX (для компактных корпусов)</li>
+                </ul>
+                <p>Важно: Не экономьте на блоке питания! Некачественный БП может повредить другие компоненты.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 PC Builder.</p>
+    </footer>
+</body>
+</html>
