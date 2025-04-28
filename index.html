@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Выбор модели ноутбука</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
+    <h1 class="text-3xl font-bold mb-6 text-gray-800">Выберите модель ноутбука</h1>
+    <div class="w-full max-w-md bg-white rounded-lg shadow-md p-6">
+        <label for="laptop-select" class="block mb-2 font-semibold text-gray-700">Модель ноутбука:</label>
+        <select id="laptop-select" class="w-full border border-gray-300 rounded-md p-2 mb-4">
+            <option value="" disabled selected>Выберите модель</option>
+            {% for laptop in laptops %}
+            <option value="{{ laptop.id }}">{{ laptop.name }} - {{ laptop.price_rub }} ₽</option>
+            {% endfor %}
+        </select>
+        <div id="upgrade-info" class="mt-4 text-gray-700">
+            <p class="italic text-gray-500">Выберите модель, чтобы увидеть информацию о возможных заменах.</p>
+        </div>
+    </div>
+
+    <script>
+        const laptopSelect = document.getElementById('laptop-select');
+        const upgradeInfo = document.getElementById('upgrade-info');
+
+        laptopSelect.addEventListener('change', async () => {
+            const laptopId = laptopSelect.value;
+            if (!laptopId) {
+                upgradeInfo.innerHTML = '<p class="italic text-gray-500">Выберите модель, чтобы увидеть информацию о возможных заменах.</p>';
+                return;
+            }
+            try {
+                const response = await fetch(`/laptop_info/${laptopId}`);
+                if (!response.ok) {
+                    upgradeInfo.innerHTML = '<p class="text-red-500">Ошибка при загрузке данных.</p>';
+                    return;
+                }
+                const data = await response.json();
+                upgradeInfo.innerHTML = `
+                    <h2 class="text-xl font-semibold mb-2">Что можно поменять:</h2>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><i class="fas fa-microchip mr-2 text-blue-500"></i>Процессор: ${data.processor}</li>
+                        <li><i class="fas fa-video mr-2 text-green-500"></i>Видеокарта: ${data.graphics_card}</li>
+                        <li><i class="fas fa-memory mr-2 text-yellow-500"></i>Оперативная память: ${data.ram}</li>
+                        <li><i class="fas fa-hdd mr-2 text-purple-500"></i>Накопитель: ${data.storage}</li>
+                    </ul>
+                `;
+            } catch (error) {
+                upgradeInfo.innerHTML = '<p class="text-red-500">Ошибка при загрузке данных.</p>';
+            }
+        });
+    </script>
+</body>
+</html>
